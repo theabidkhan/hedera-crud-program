@@ -12,24 +12,24 @@ contract ProductContract {
 
     string[] ProductIdList;
     mapping(string => Product) public productMap;
-    // address public owner;
+    address public owner;
     Product[] product;
 
-    // constructor() {
-    //     // owner = msg.sender;
-    // }
+    constructor() {
+        owner = msg.sender;
+    }
 
-    // modifier isOwner(address _owner) {
-    //     require(owner == _owner, "Not a owner");
-    //     _;
-    // }
+    modifier isOwner(address _owner) {
+        require(owner == _owner, "Not a owner");
+        _;
+    }
 
     function addProduct(
         string memory _id,
         string memory _name,
         string memory _color,
         string memory _owner
-    ) public {
+    ) public isOwner(msg.sender) {
         require(!isProductRegistered(_id));
         productMap[_id] = Product(_id, _name, _color, _owner, 1);
         ProductIdList.push(_id);
